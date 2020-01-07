@@ -1,29 +1,40 @@
-.formElement{
-    margin:20px;
-    padding:5px;
-    position: relative;
-    text-align: center; 
-}
 .login-container{
-    border:2px solid #4CAF50;
-    margin:3% 20%;
-    padding:5%;
+    margin:2% 25%;
+    /* border:2px red solid; */
 }
-input[type=text], input[type=password] {
-    width: auto;
+input[type=text] {
+    width: 40%;
     padding: 12px 20px;
-    /* margin: 8px 0; */
+    margin: 8px 0;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid coral;
     box-sizing: border-box;
   }
-  button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
+  input[type=email] {
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
     display: inline-block;
-    font-size: 16px;
+    border: 1px solid coral;
+    box-sizing: border-box;
+  }
+  .form-container{
+      display: flex;
+      flex-direction: column;
+  }
+  ul{
+      list-style: none;
+  }
+  input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    /* width: 100%; */
+  }
+  .invalid{
+      color:red;
+      display: none;
   }

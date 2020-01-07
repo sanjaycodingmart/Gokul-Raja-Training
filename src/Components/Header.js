@@ -1,39 +1,26 @@
-import React, { Component, Fragment } from "react";
-import "./header.css";
-import SignIn from "./SignIn";
-class Header extends Component {
-  state = {
-    showSignIn: false
-  };
-  submitClicked = () =>{
-      this.setState({
-          showSignIn:true
-      })
-  }
-  render() {
-    return (
-      <Fragment>
-        <div className="header-container">
-          <div class="flex-container">
-            <div className="signIn">
-              <ul>
-                <li>
-                  <a class="active" href="#home">
-                    MartSheet
-                  </a>
-                </li>
-                <li style={{float:"right"}} onClick={this.submitClicked}>
-                  <a href="#about">SignIn</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        {this.state.showSignIn && <SignIn />}
-        {/* <TableHeaders/> */}
-        {/* <EntryTable/> */}
-      </Fragment>
-    );
-  }
+import React, { Fragment } from 'react';
+import './header.css';
+import {Link} from 'react-router-dom';
+// import logo from './logo.svg';
+import { Wave } from 'react-animated-text';
+export default function Header(props){
+    return(
+        <Fragment>
+            <header className="header-container">
+                
+                <ul>
+                    
+                    <li><h1>
+                    <Wave text="Article Search" effect="stretch"
+  effectChange="2"/></h1>
+  </li>
+  {/* <div><img src={logo} className="App-logo" alt="logo" style={imgStyle} /></div> */}
+                </ul>
+                <Link to="/signin">
+         <div className="signIn">Sign In / Sign  Up</div> 
+        </Link>
+                
+            </header>
+        </Fragment>
+    )
 }
-export default Header;

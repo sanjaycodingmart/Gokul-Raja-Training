@@ -1,24 +1,27 @@
 import React from 'react';
+
 import './App.css';
-import {
-  BrowserRouter as Router,
-  Route,
-} from 'react-router-dom';
-import SignIn from './SignIn'
-import Navigation from './Navigation';
-import * as ROUTES from '../Constants/routes';
-import TableHeaders from './GetTableHeadings';
-import UserTables from './UserTables'
+import SignIn from './SignIn';
+import {BrowserRouter as Router, Switch, Route,Link} from 'react-router-dom';
+import DashBoard from './DashBoard';
+import Favourite from './Favourite';
+import DocumentAbstract from './DocumentAbstract';
+import Header from './Header';
 
+function App() {
+  return (
+    <Router>
+      <Header/>
+      <div className="App">
+      <Switch>
+      <Route exact path="/signin" component={SignIn}/>
+        <Route exact path="/dashboard" component={DashBoard}/>
+        <Route exact path="/favourites" component={Favourite} />
+        <Route exact path="/documents" component={DocumentAbstract} />
+      </Switch>
+    </div>
+    </Router>
+  );
+}
 
-const App = () => (
-  <Router>
-  <div>
-    <Navigation />
-      <Route path={ROUTES.SIGN_IN} component={SignIn} />
-      <Route path={ROUTES.HOME} component={UserTables} />
-      <Route path={ROUTES.ACCOUNT} component={TableHeaders} />
- </div> 
- </Router>
-);
 export default App;

@@ -1,0 +1,9 @@
+.favos{
+
+    padding:20px;
+    display: flex;
+    display: inline-block;
+    text-align: left;
+    text-align: center;
+    justify-content:space-around;
+}
