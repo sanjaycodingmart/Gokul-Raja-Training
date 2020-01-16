@@ -1,0 +1,12 @@
+.box-container{
+    width:auto;
+    height:587px;
+    border:1px solid black;
+    padding-top: 30px;
+    margin-left: 12.5%;
+}
+.box-heading > ul{
+    background-color: white;
+    list-style-type:none;
+    display: inline-block;
+}

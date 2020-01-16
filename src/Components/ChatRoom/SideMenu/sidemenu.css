@@ -1,0 +1,36 @@
+.menu-container{
+    margin:0;
+    width: 12%;
+    height:587px;
+    border:2px black solid;
+    padding-top: 30px;
+    
+}
+.channels > ul ,.user-menu >ul{ 
+    background-color: white;
+    list-style-type: none;
+}
+h4 > button{ 
+    background-color: white;
+    margin:0;
+    padding:0;
+}
+.channels > ul > li{
+    border:0px;
+    list-style-type: none;
+}
+.add-icon{
+    border:1px black solid;
+    color:black;
+    width: 18px;
+    height: 20px;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+.search > input[type=text]{
+    border-radius: 20px;
+}
+.channels{
+    padding-bottom: 60px;
+}
