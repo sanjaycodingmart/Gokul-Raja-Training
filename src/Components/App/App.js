@@ -8,7 +8,9 @@ import SignIn from '../SignIn/SignIn';
 import SignUp from '../SignUp/SignUp';
 import './App.css';
 import GroupChat from '../GroupChat/GroupChat';
-
+import CoupleChat from '../CoupleChat/couplechat';
+import Content from '../Content/Content'
+import About from '../Profile/about';
 class App  extends Component{
   constructor(props){
     super(props);
@@ -32,7 +34,9 @@ class App  extends Component{
       <Route path={ROUTES.CHAT_TV} component={ChatTv} />
       <Route path={ROUTES.CHAT_BOX} component={ChatBoxed} />
       <Route path={ROUTES.GRP_CHAT} component={GroupChat} />
-      
+      <Route path={ROUTES.NAV} component={Navigation} />
+      <Route path={ROUTES.SOLO} component={CoupleChat}/>
+      <Route path={ROUTES.PROFILE} component={About}/>
   
  </div> 
  </Router>

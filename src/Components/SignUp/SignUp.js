@@ -6,9 +6,11 @@ const SignIn = ()=>{
     const [user,setuser]=useState("");
     const[email,setemail]=useState("");
     const[password,setpassword]=useState("");
+    const[img,setimg]=useState("")
    const handleName=(event)=> setuser(event.target.value);
    const handleEmail=(event)=> setemail(event.target.value);
    const handlePass=(event)=> setpassword(event.target.value);
+   const handleAvatar = (event)=>setimg(event.target.value);
           
    const submitted = async()=>
     {
@@ -46,7 +48,6 @@ const SignIn = ()=>{
 <div id="id01" className="modal">
 
   <div className="modal-content animate">
-  
     <div className="imgcontainer">
     <span 
 className="close" title="Close Modal"><Link to ='/'>&times;</Link></span>
@@ -61,7 +62,7 @@ className="close" title="Close Modal"><Link to ='/'>&times;</Link></span>
 
       <label><b>Password</b></label>
       <input type="password" placeholder="Enter Password" min="6" name="pass" onChange={handlePass} required/>
-        
+      <label><b>Choose a picture :</b></label><input type="file" name="imgUploader" accept="image/*" enctype="multipart/form-data" id="avatar" onChange={handleAvatar}/>
       <button type="submit" className="sign" onClick={submitted}>Sign Up</button>
     </div>
   </div>

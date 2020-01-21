@@ -1,47 +1,40 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import "./sigin.css";
-const SignIn = (props) => {
+const SignIn = props => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const handleEmail = event => setemail(event.target.value);
   const handlePass = event => setpassword(event.target.value);
-  const changeRoute = () => props.history.push('/groupchat'+'?user='+email);
-  const submitted = async() => {  
+  const changeRoute = () => {
+    props.history.push("/");
+    localStorage.setItem("loggedIn", email);
+  };
+  const submitted = async () => {
     let flag = false;
-
     let re = /\S+@\S+\.\S+/;
-    if (re.test(email) && password!=="") {
+    if (re.test(email) && password !== "") {
       flag = true;
     } else {
       alert("Enter Valid Email/Password");
     }
 
-    if (flag){
-      
-      let users=await axios.get('http://localhost:3005/users',{
-        params:{
-          email:email,
-          password:password
+    if (flag) {
+      let users = await axios.get("http://localhost:3005/users", {
+        params: {
+          email: email,
+          password: password
         }
-      })
-      console.log("Users",users)
-        if(users.data.data.length>0){
-          
-          // localStorage.setItem(email,value.name);
-          // localStorage.setItem("currentUser",email);
-          localStorage.setItem("token",users.data.token);
-          changeRoute()
-       
-          return true
-        }else{
-          localStorage.setItem("token","");
-        } 
+      });
+      if (users.data.data.length > 0) {
+        localStorage.setItem("token", users.data.token);
+        changeRoute();
 
-      
-      
-      
+        return true;
+      } else {
+        localStorage.setItem("token", "");
+      }
     }
   };
   return (

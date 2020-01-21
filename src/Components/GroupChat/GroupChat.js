@@ -9,16 +9,22 @@ export default class GroupChat extends Component{
             token:"",
             groupArray:[],
             sender:"",
-            msg:""
+            msg:"",
+            userName:{}
         }
     }
 async componentDidMount(){
     let token = await localStorage.getItem("token");
-    let emailed = window.location.href.substring(37);
-
+    let emailed = this.props.location.state.sender;
+    let allUsers = this.props.location.state.allUsers;
+    let values={}
+    allUsers.map((value,index)=>{
+        values[value.email]=value.title
+    })
     await this.setState({
       token: token,
-      sender:emailed
+      sender:emailed,
+      userName:values
     });
     this.getGroup();
 }
@@ -28,23 +34,22 @@ getGroup = () => {
         headers: { authorization: "Bearer " + this.state.token }
       });
       resolve(groupMsg);
-      console.log("APi", groupMsg);
     });
     groupApi.then(response => {
-      console.log(response);
       let respObjArray = response.data.map((value, index) => {
         return {
           text: value.message,
           id:index,
           sender: {
-            name: value.email,
+            name: this.state.userName[value.email],
             uid: value.email
           }
         };
       });
+      if(this.state.groupArray.length<respObjArray.length){
       this.setState({
         groupArray: respObjArray,
-      });
+      });}
     });
   };
   handleMsg = event => this.setState({ msg: event.target.value });
@@ -61,6 +66,7 @@ getGroup = () => {
       headers: { authorization: "Bearer " + this.state.token }
     });
     setTimeout(this.getGroup, 1000);
+    setInterval(this.getGroup,5000);
   };
   
     render()
