@@ -28,13 +28,14 @@ const SignIn = props => {
         }
       });
       if (users.data.data.length > 0) {
+        console.log("TOke ",users.data.token)
         localStorage.setItem("token", users.data.token);
         changeRoute();
 
         return true;
       } else {
         localStorage.setItem("token", "");
-      }
+      } 
     }
   };
   return (

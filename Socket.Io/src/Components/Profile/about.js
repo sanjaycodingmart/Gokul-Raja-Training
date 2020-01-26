@@ -24,7 +24,7 @@ export default class About extends Component {
         about:this.state.about,
         email:localStorage.getItem("loggedIn")
     }
-  let users =  await axios.post("http://localhost:3005/setabout",requested, {
+  let users =  await axios.post("http://localhost:4001/setabout",requested, {
       headers: {
         authorization: "Bearer " + localStorage.getItem("token")
       }
@@ -41,12 +41,11 @@ export default class About extends Component {
             </label>
             <input
               type="email"
-              placeholder="Enter Email Id"
+              placeholder="Enter your Status Here"
               name="email"
               onChange={this.handleAbout}
               required
             />
-
            
           
             <button type="submit" className="sign" onClick={this.update}>

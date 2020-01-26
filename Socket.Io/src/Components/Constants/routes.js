@@ -8,3 +8,4 @@ export const GRP_CHAT='/groupchat';
 export const NAV ='/navigation'
 export const SOLO='/couplechat'
 export const PROFILE='/profile'
+export const CREATE_GROUP ='/creategroup'

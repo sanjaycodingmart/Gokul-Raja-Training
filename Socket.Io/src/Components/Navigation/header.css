@@ -51,3 +51,6 @@
   .fullList{
     width:auto;
   }
+  li a {
+    color:black
+  }

@@ -40,7 +40,7 @@ export default function MenuAppBar() {
 const logOut = async () => {
     localStorage.setItem("token", "");
     await axios.post(
-      "http://localhost:3005/logout",
+      "http://localhost:4001/logout",
       {
         email: localStorage.getItem("loggedIn")
       },

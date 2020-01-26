@@ -37,31 +37,29 @@ export default class Navigation extends Component {
       selectedUser: "",
       chattedUser: [],
       soloUser: "",
-      about:{}
+      about:{},
+      urls:{},
+      groups:[]
     };
   }
   // async componentDidMount() {
   //   localStorage.setItem("token", "");
   // }
   componentWillMount() {
-    setInterval(this.checkLog, 2000);
+    setInterval(this.checkLog,8000);
+    setInterval(this.aboutAndUrl,9000);
+    
   }
+ 
 
   checkLog = async () => {
-    if (localStorage.getItem("token").length > 0) {
+    if (localStorage.getItem("token") && localStorage.getItem("token").length > 0) {
       this.setState({
         log: true,
         token: localStorage.getItem("token")
       });
-      this.showAll();
-      let users =await axios.get("http://localhost:4001/getabout");
-      let values = {};
-      users.data.map((value, index) => {
-        values[value.email] = value.about;
-      });
-      this.setState({
-        about:values
-      })
+      this.showAll()
+     
   
       
     } else {
@@ -71,6 +69,19 @@ export default class Navigation extends Component {
       });
     }
   };
+  aboutAndUrl = async()=>{
+    let users =await axios.get("http://localhost:4001/getabout");
+    let values = {};
+    let urls={}
+    users.data.map((value, index) => {
+      values[value.email] = value.about;
+      urls[value.email]=value.url;
+    });
+    this.setState({
+      about:values,
+      urls:urls
+    })
+  }
   handleUser = event => {
     this.setState({
       selectedUser: event.target.value
@@ -101,9 +112,9 @@ export default class Navigation extends Component {
             {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
           </ListItemIcon>
           <ListItemText primary={"Channels"} />
-          <Fab color="primary" aria-label="add">
+          <Link to ='/creategroup'> <Fab color="primary" aria-label="add">
         <AddIcon />
-      </Fab>
+      </Fab></Link>
         </ListItem>
 
         <Link
@@ -174,11 +185,12 @@ export default class Navigation extends Component {
               <ListItem button key={index}>
                 
                   <ListItemIcon>
-                  <Tooltip title={this.state.about[text.split(" ")[1]]} interactive><Button> <Avatar>{text[0]}</Avatar>
+                  <Tooltip title={this.state.about[text.split(" ")[1]]} interactive><Button><img src={this.state.urls[text.split(" ")[1]]} className="avatar" alt={text}/>
                   </Button></Tooltip>
                    </ListItemIcon>
                   
-                <ListItemText primary={text} />
+                <ListItemText primary={text.split(" ")[0].charAt(0).toUpperCase() +
+                  text.split(" ")[0].slice(1)} />
               </ListItem>
            
           </Link>
@@ -218,10 +230,14 @@ export default class Navigation extends Component {
       userNameArray.push(name);
     });
 
-    await this.setState({
+    this.setState({
       userList: userNameArray,
       sender: localStorage.getItem("loggedIn")
     });
+    const groups =await axios.get("http://localhost:4001/getusergroups",{
+      params:{
+        username:localStorage.getItem("loggedIn")}})
+    console.log("Groups",groups)
     return true;
   };
   render() {

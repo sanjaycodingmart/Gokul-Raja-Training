@@ -13,17 +13,16 @@ export default class GroupChat extends Component {
       groupArray: [],
       sender: "",
       msg: "",
-      userName: {},
+      userName: {}
     };
     this.socket = io.connect("http://localhost:4001/group");
-    this.socket.on("group message",(data)=>{
+    this.socket.on("group message", data => {
       this.setState({
-        groupArray:[...this.state.groupArray,data]
-      })
-    })
+        groupArray: [...this.state.groupArray, data]
+      });
+    });
   }
-  getUrl = async (user) => {
-    
+  getUrl = async user => {
     let url = await axios.get("http://localhost:4001/geturl", {
       params: {
         user: user
@@ -33,24 +32,30 @@ export default class GroupChat extends Component {
     // url.then((resp)=>{
     //   return resp[0].url
     // });
-    
   };
   async componentDidMount() {
     let token = await localStorage.getItem("token");
     let emailed = this.props.location.state.sender;
     let allUsers = this.props.location.state.allUsers;
+    console.log(allUsers);
     let values = {};
+    let urls = {};
     allUsers.map((value, index) => {
       values[value.email] = value.title;
+      this.getUrl(value.email).then(resp => {
+        urls[value.email] = resp;
+      });
     });
+    
     await this.setState({
       token: token,
       sender: emailed,
-      userName: values
+      userName: values,
+      urls: urls
     });
     this.getGroup();
   }
-getGroup = () => {
+  getGroup = () => {
     let groupApi = new Promise(async (resolve, reject) => {
       let groupMsg = await axios.get("http://localhost:4001/group", {
         headers: { authorization: "Bearer " + this.state.token }
@@ -59,25 +64,22 @@ getGroup = () => {
     });
     groupApi.then(response => {
       let respObjArray = response.data.map((value, index) => {
-        let urlImg=null;
-        this.getUrl(value.email).then((resp)=>{
-         urlImg=resp;
-         console.log(urlImg)
-        });
+        console.log("outside");
         return {
           text: value.message,
-          id:index,
+          id: index,
           sender: {
             name: this.state.userName[value.email],
             uid: value.email,
-            avatar:urlImg
+            avatar: this.state.urls[value.email]
           }
         };
       });
-      if(this.state.groupArray.length<respObjArray.length){
-      this.setState({
-        groupArray: respObjArray,
-      });}
+      if (this.state.groupArray.length < respObjArray.length) {
+        this.setState({
+          groupArray: respObjArray
+        });
+      }
     });
   };
   handleMsg = event => this.setState({ msg: event.target.value });
@@ -95,20 +97,21 @@ getGroup = () => {
       message: this.state.msg,
       email: this.state.sender
     });
-   
-    let chatmsg={
+
+    let chatmsg = {
       text: this.state.msg,
-      id: this.state.groupArray.length+1,
+      id: this.state.groupArray.length + 1,
       sender: {
         name: this.state.userName[this.state.sender],
-        uid: this.state.sender
+        uid: this.state.sender,
+        avatar:this.state.urls[this.state.sender]
       }
-    }
-    
+    };
+
     this.setState({
-      groupArray:[...this.state.groupArray,chatmsg]
-    })
-    socket.emit("group message",chatmsg);
+      groupArray: [...this.state.groupArray, chatmsg]
+    });
+    socket.emit("group message", chatmsg);
     // axios.post("http://localhost:4001/sendgroupmsg", requestedBody, {
     //   headers: { authorization: "Bearer " + this.state.token }
     // });

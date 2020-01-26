@@ -13,6 +13,7 @@ import GroupChat from '../GroupChat/GroupChat';
 import CoupleChat from '../CoupleChat/couplechat';
 import Content from '../Content/Content'
 import About from '../Profile/about';
+import CreateGroupChat from '../CreateGroupChat/creategroup';
 class App  extends Component{
   constructor(props){
     super(props);
@@ -47,6 +48,7 @@ class App  extends Component{
       <Route path={ROUTES.NAV} component={Navigation} />
       <Route path={ROUTES.SOLO} component={CoupleChat}/>
       <Route path={ROUTES.PROFILE} component={About}/>
+      <Route path={ROUTES.CREATE_GROUP} component={CreateGroupChat}/>
   
  </div> 
  </Router>

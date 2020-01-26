@@ -24,12 +24,14 @@ export default class CoupleChat extends Component {
 
     this.sockets=io.connect("http://localhost:4001")
     this.socket = io.connect("http://localhost:4001/individual");
+    this.socket.emit("unique ,",this.state.uniqueSocket)
     this.socket.on(this.state.uniqueSocket, data => {
       console.log("Inside Cons",this.state.uniqueSocket)
       this.setState({
         groupArray: [...this.state.groupArray, data]
       });
     });
+    
 
   }
   getUrl = async user => {
@@ -38,7 +40,7 @@ export default class CoupleChat extends Component {
         user: user
       }
     });
-    return url.data[0].url;
+    return url.data.url;
   };
   async componentDidMount(){
     console.log("Mounted");
@@ -165,7 +167,7 @@ export default class CoupleChat extends Component {
     this.setState({
       groupArray:[...this.state.groupArray,chatmsgObj]
     })
-    this.socket.emit("unique ,",this.state.uniqueSocket)
+    
     this.socket.emit(this.state.uniqueSocket,chatmsgObj)
     
     // axios.post("http://localhost:4001/sendIndmsg", requestedBody, {

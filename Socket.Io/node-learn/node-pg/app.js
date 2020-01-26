@@ -34,10 +34,12 @@ router.get("/", (req, res) => {
 });
 io.origins("*:*")
 let individualChat = io.of("/individual").on("connection",(socket)=>{
+  
   socket.on("unique ,",(data)=>{
     socket.on(data,(msg)=>{
       console.log("Dataaa",data,msg)
       socket.broadcast.emit(data,msg)
+      
     })
   })
 
@@ -102,13 +104,22 @@ app.post("/fileUpload", upload.single("image"),(req, res, next) => {
 });
 server.listen(port, () => console.log(`Listening on port ${port}`));
 module.exports = router;
+
+
+
+
+//Routes and Respective Queries
 app.get("/users", db.getUsers);
 app.get("/geturl", db.geturl);
 app.get("/group", middleware.checkToken, db.getGroupMsg);
+app.post("/addgroup", db.addNewGroup);
 app.post("/createUser", db.createUser);
+app.post("/addusergroup",db.addUserGroups);
 app.post("/sendgroupmsg", middleware.checkToken, db.sendGroupMsg);
 app.post("/sendIndmsg", middleware.checkToken, db.sendIndMsg);
 app.get("/getchatmsg", middleware.checkToken, db.getChatMsg);
 app.get("/getall", middleware.checkToken, db.getAllUsers);
 app.post("/logout", middleware.checkToken, db.logout);
 app.get("/getabout", db.getAbout);
+app.post("/setabout",db.setAbout)
+app.get("/getusergroups",db.getUserGroupName)
