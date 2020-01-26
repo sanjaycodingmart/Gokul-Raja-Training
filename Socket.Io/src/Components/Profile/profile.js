@@ -39,6 +39,7 @@ export default function MenuAppBar() {
   };
 const logOut = async () => {
     localStorage.setItem("token", "");
+    localStorage.setItem("loggedIn","")
     await axios.post(
       "http://localhost:4001/logout",
       {

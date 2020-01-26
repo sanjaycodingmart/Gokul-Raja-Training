@@ -10,8 +10,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import TextField from "@material-ui/core/TextField";
 import Toolbar from "@material-ui/core/Toolbar";
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -37,31 +37,29 @@ export default class Navigation extends Component {
       selectedUser: "",
       chattedUser: [],
       soloUser: "",
-      about:{},
-      urls:{},
-      groups:[]
+      about: {},
+      urls: {},
+      groups: []
     };
   }
   // async componentDidMount() {
   //   localStorage.setItem("token", "");
   // }
   componentWillMount() {
-    setInterval(this.checkLog,8000);
-    setInterval(this.aboutAndUrl,9000);
-    
+    setInterval(this.checkLog, 4000);
+    setInterval(this.aboutAndUrl, 9000);
   }
- 
 
   checkLog = async () => {
-    if (localStorage.getItem("token") && localStorage.getItem("token").length > 0) {
+    if (
+      localStorage.getItem("token") &&
+      localStorage.getItem("token").length > 0
+    ) {
       this.setState({
         log: true,
         token: localStorage.getItem("token")
       });
-      this.showAll()
-     
-  
-      
+      this.showAll();
     } else {
       this.setState({
         log: false,
@@ -69,27 +67,25 @@ export default class Navigation extends Component {
       });
     }
   };
-  aboutAndUrl = async()=>{
-    let users =await axios.get("http://localhost:4001/getabout");
+  aboutAndUrl = async () => {
+    let users = await axios.get("http://localhost:4001/getabout");
     let values = {};
-    let urls={}
+    let urls = {};
     users.data.map((value, index) => {
       values[value.email] = value.about;
-      urls[value.email]=value.url;
+      urls[value.email] = value.url;
     });
     this.setState({
-      about:values,
-      urls:urls
-    })
-  }
+      about: values,
+      urls: urls
+    });
+  };
   handleUser = event => {
     this.setState({
       selectedUser: event.target.value
     });
   };
   addUserChat = () => {
-    
-
     if (!this.state.chattedUser.includes(this.state.selectedUser)) {
       this.setState({
         chattedUser: [...this.state.chattedUser, this.state.selectedUser]
@@ -97,7 +93,6 @@ export default class Navigation extends Component {
     } else {
       return;
     }
-    
   };
   sideList = side => (
     <div
@@ -112,27 +107,44 @@ export default class Navigation extends Component {
             {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
           </ListItemIcon>
           <ListItemText primary={"Channels"} />
-          <Link to ='/creategroup'> <Fab color="primary" aria-label="add">
-        <AddIcon />
-      </Fab></Link>
+          <Link to="/creategroup">
+            {" "}
+            <Fab color="primary" aria-label="add">
+              <AddIcon />
+            </Fab>
+          </Link>
         </ListItem>
-
-        <Link
+      </List>
+      <List>
+        {this.state.groups.length!=0 && this.state.groups.map((value, index) => (
+          <Link
           to={{
             pathname: "/groupchat",
             state: {
               sender: this.state.sender,
+              group:value,
               allUsers: this.state.userList
             }
           }}
         >
-          <ListItem button key={"2"}>
+          <ListItem button key={index}>
             <ListItemIcon>
-              {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+              <Tooltip title={value} interactive>
+                <Button>
+                  <Avatar>{value[0]}</Avatar>
+                  {/* <img
+                    src={this.state.urls[text.split(" ")[1]]}
+                    className="avatar"
+                    alt={text}
+                  /> */}
+                </Button>
+              </Tooltip>
             </ListItemIcon>
-            <ListItemText primary={"#CodingMart"} />
+
+            <ListItemText primary={value} />
           </ListItem>
-        </Link>
+          </Link>
+        ))}
       </List>
 
       <Divider />
@@ -143,8 +155,17 @@ export default class Navigation extends Component {
           disableClearable
           options={this.state.userList.map(option =>
             option.status === "active"
-              ? option.title + " " + option.email + " " +String.fromCodePoint(0x2714) +option.status
-              : option.title + " " + option.email+" "+String.fromCodePoint(0x1f4a4)
+              ? option.title +
+                " " +
+                option.email +
+                " " +
+                String.fromCodePoint(0x2714) +
+                option.status
+              : option.title +
+                " " +
+                option.email +
+                " " +
+                String.fromCodePoint(0x1f4a4)
           )}
           renderInput={params => (
             <TextField
@@ -158,18 +179,21 @@ export default class Navigation extends Component {
             />
           )}
         />
-        <button onClick={this.addUserChat}><Link
+        <button onClick={this.addUserChat}>
+          <Link
             to={{
               pathname: "/couplechat",
               state: {
                 receiver: this.state.selectedUser,
                 sender: this.state.sender,
-                allUsers: this.state.userList,
+                allUsers: this.state.userList
               }
             }}
-          >+</Link></button>
+          >
+            +
+          </Link>
+        </button>
         {this.state.chattedUser.map((text, index) => (
-          
           <Link
             to={{
               pathname: "/couplechat",
@@ -181,18 +205,31 @@ export default class Navigation extends Component {
             }}
           >
             {" "}
-            
-              <ListItem button key={index}>
-                
-                  <ListItemIcon>
-                  <Tooltip title={this.state.about[text.split(" ")[1]]} interactive><Button><img src={this.state.urls[text.split(" ")[1]]} className="avatar" alt={text}/>
-                  </Button></Tooltip>
-                   </ListItemIcon>
-                  
-                <ListItemText primary={text.split(" ")[0].charAt(0).toUpperCase() +
-                  text.split(" ")[0].slice(1)} />
-              </ListItem>
-           
+            <ListItem button key={index}>
+              <ListItemIcon>
+                <Tooltip
+                  title={this.state.about[text.split(" ")[1]]}
+                  interactive
+                >
+                  <Button>
+                    <img
+                      src={this.state.urls[text.split(" ")[1]]}
+                      className="avatar"
+                      alt={text}
+                    />
+                  </Button>
+                </Tooltip>
+              </ListItemIcon>
+
+              <ListItemText
+                primary={
+                  text
+                    .split(" ")[0]
+                    .charAt(0)
+                    .toUpperCase() + text.split(" ")[0].slice(1)
+                }
+              />
+            </ListItem>
           </Link>
         ))}
       </List>
@@ -229,15 +266,16 @@ export default class Navigation extends Component {
       };
       userNameArray.push(name);
     });
-
+    const groups = await axios.get("http://localhost:4001/getusergroups", {
+      params: {
+        username: localStorage.getItem("loggedIn")
+      }
+    });
     this.setState({
       userList: userNameArray,
-      sender: localStorage.getItem("loggedIn")
+      sender: localStorage.getItem("loggedIn"),
+      groups: groups.data[0].usergroups
     });
-    const groups =await axios.get("http://localhost:4001/getusergroups",{
-      params:{
-        username:localStorage.getItem("loggedIn")}})
-    console.log("Groups",groups)
     return true;
   };
   render() {

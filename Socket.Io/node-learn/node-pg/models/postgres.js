@@ -131,7 +131,8 @@ const createUser = (request, response) => {
 };
 const getGroupMsg = (request, response) => {
   console.log("group called");
-  pool.query("SELECT * FROM chatgroup", (error, results) => {
+  const groupname = request.query.group;
+  pool.query("SELECT * FROM chatgroup where groupname = $1",[groupname], (error, results) => {
     if (error) {
       throw error;
     }
@@ -141,11 +142,12 @@ const getGroupMsg = (request, response) => {
 const sendGroupMsg = data => {
   const email = data.email;
   const message = data.message;
+  const groupname=data.group;
   const date = new Date();
   const created_at = date;
   pool.query(
-    "INSERT INTO chatgroup (email,message,created_at) VALUES ($1, $2 ,$3)",
-    [email, message, created_at],
+    "INSERT INTO chatgroup (email,message,created_at,groupname) VALUES ($1, $2 ,$3,$4)",
+    [email, message, created_at,groupname],
     (error, results) => {
       // if (error) {
       //   throw error;

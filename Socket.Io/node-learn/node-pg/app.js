@@ -58,16 +58,22 @@ var chat = io.of("/group").on("connection", function(socket) {
     socket.on("send group message",(data)=>{
     let email = data.email;
     let message=data.message;
+    let groupname=data.group;
     console.log("Email",email);
     console.log("Message",message);
     let req = {
       message:message,
-      email:email
+      email:email,
+      group:groupname
     }
     db.sendGroupMsg(req)
   })
-  socket.on("group message",(data)=>{
-    socket.broadcast.emit("group message" ,data)
+  socket.on("group",(data)=>{
+    socket.on(data,(msg)=>{
+      console.log("Dataaa",data,msg)
+      socket.broadcast.emit(data,msg)
+      
+    })
   })
   // chat.emit("a message", {
   //   everyone: "in",
