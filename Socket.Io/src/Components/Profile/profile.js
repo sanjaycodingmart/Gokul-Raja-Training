@@ -7,6 +7,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import axios from 'axios';
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
+import jwt_decode from 'jwt-decode'
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -25,7 +27,8 @@ export default function MenuAppBar() {
   const [token,settoken]=React.useState(localStorage.getItem("token"))
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
+  const loggedIn=jwt_decode(localStorage.getItem("token"))
+  
   const handleChange = event => {
     setAuth(event.target.checked);
   };
@@ -39,11 +42,10 @@ export default function MenuAppBar() {
   };
 const logOut = async () => {
     localStorage.setItem("token", "");
-    localStorage.setItem("loggedIn","")
     await axios.post(
       "http://localhost:4001/logout",
       {
-        email: localStorage.getItem("loggedIn")
+        email: loggedIn.email
       },
       {
         headers: { authorization: "Bearer " + token }

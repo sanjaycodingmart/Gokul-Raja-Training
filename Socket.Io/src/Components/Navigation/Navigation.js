@@ -23,7 +23,7 @@ import CoupleChat from "../CoupleChat/couplechat";
 import "./header.css";
 import Tooltip from "@material-ui/core/Tooltip";
 import MenuAppBar from "../Profile/profile";
-
+import jwt_decode from 'jwt-decode'
 export default class Navigation extends Component {
   constructor(props) {
     super(props);
@@ -59,6 +59,12 @@ export default class Navigation extends Component {
         log: true,
         token: localStorage.getItem("token")
       });
+      let loggedIn=jwt_decode(localStorage.getItem("token"))
+      if(this.state.loggedIn!=loggedIn.email){
+        this.setState({
+          loggedIn:loggedIn.email
+        })
+      }
       this.showAll();
     } else {
       this.setState({
@@ -93,6 +99,7 @@ export default class Navigation extends Component {
     } else {
       return;
     }
+    
   };
   sideList = side => (
     <div
@@ -268,12 +275,12 @@ export default class Navigation extends Component {
     });
     const groups = await axios.get("http://localhost:4001/getusergroups", {
       params: {
-        username: localStorage.getItem("loggedIn")
+        username: this.state.loggedIn
       }
     });
     this.setState({
       userList: userNameArray,
-      sender: localStorage.getItem("loggedIn"),
+      sender: this.state.loggedIn,
       groups: groups.data[0].usergroups
     });
     return true;
@@ -316,7 +323,7 @@ export default class Navigation extends Component {
 
               {!this.state.log === false && (
                 <Fragment>
-                  <p>Signed In as {localStorage.getItem("loggedIn")}</p>
+                  <p>Signed In as {this.state.loggedIn}</p>
                 </Fragment>
               )}
             </Toolbar>

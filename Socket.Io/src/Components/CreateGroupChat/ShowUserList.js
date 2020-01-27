@@ -1,7 +1,9 @@
 import React from "react";
+import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import Snackbar from '@material-ui/core/Snackbar';
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -16,9 +18,13 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   }
 }));
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function CheckboxListSecondary(props) {
   const classes = useStyles();
+  const [open,setopen]=React.useState(false)
   const [checked, setChecked] = React.useState([]);
   const [userList, setUserList] = React.useState([]);
   React.useEffect(() => {
@@ -40,8 +46,11 @@ export default function CheckboxListSecondary(props) {
       members: checked
     };
     console.log(requestBody);
-    addGroups();
+    // addGroups();
+    setopen(true)
+    setChecked([])
     let send = await axios.post("http://localhost:4001/addgroup", requestBody);
+    
   };
   const addGroups = () => {
     alert("Called");
@@ -51,6 +60,13 @@ export default function CheckboxListSecondary(props) {
       });
       console.log("Added User Groups")
     
+  };
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setopen(false);
   };
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -102,6 +118,11 @@ export default function CheckboxListSecondary(props) {
       <Button variant="contained" color="primary" onClick={()=>createGroup()}>
         Create Group
       </Button>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          Group Created Successfully!
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 }

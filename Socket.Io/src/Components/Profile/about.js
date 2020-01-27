@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from "react";
 import axios from 'axios';
+import jwt_decode from 'jwt-decode'
 export default class About extends Component {
   constructor(props) {
     super(props);
     this.state = {
         about:"",
-        token:""
+        token:"",
+        loggedIn:""
     };
   }
   handleAbout = (event)=>{
@@ -14,15 +16,17 @@ export default class About extends Component {
       })
   }
   async componentDidMount(){
+    let loggedIn=jwt_decode(localStorage.getItem("token"))
       this.setState({
-          token:localStorage.getItem("token")
+          token:localStorage.getItem("token"),
+          loggedIn:loggedIn.email
       })
       
   }
   update = async()=>{
     let requested={
         about:this.state.about,
-        email:localStorage.getItem("loggedIn")
+        email:this.state.loggedIn
     }
   let users =  await axios.post("http://localhost:4001/setabout",requested, {
       headers: {

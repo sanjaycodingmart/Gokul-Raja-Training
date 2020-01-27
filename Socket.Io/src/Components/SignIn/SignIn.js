@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import jwt_decode from 'jwt-decode';
 import "./sigin.css";
 const SignIn = props => {
   const [email, setemail] = useState("");
@@ -27,11 +28,11 @@ const SignIn = props => {
           password: password
         }
       });
-      if (users.data.data.length > 0) {
+      console.log(users)
+      if (users.data.data.length ==1) {
         console.log("TOke ",users.data.token)
         localStorage.setItem("token", users.data.token);
         changeRoute();
-
         return true;
       } else {
         localStorage.setItem("token", "");

@@ -73,7 +73,6 @@ const getAllUsers = (request, response) => {
 };
 const geturl = (request, response) => {
   const email = request.query.user;
-  console.log("Inside Url", email);
   pool.query(
     "SELECT url FROM chatusers where email=$1",
     [email],
@@ -130,7 +129,6 @@ const createUser = (request, response) => {
   );
 };
 const getGroupMsg = (request, response) => {
-  console.log("group called");
   const groupname = request.query.group;
   pool.query("SELECT * FROM chatgroup where groupname = $1",[groupname], (error, results) => {
     if (error) {
@@ -192,7 +190,6 @@ const getChatMsg = (request, response) => {
 };
 const getUserGroupName = (request,response)=>{
   const username=request.query.username;
-  console.log(username)
   pool.query("select usergroups from chatusers where email = $1",[username],(error,results)=>{
     if(error)
     {
@@ -203,7 +200,6 @@ const getUserGroupName = (request,response)=>{
 }
 const addNewGroup = (request, response) => {
   const { groupname, groupadmin, members } = request.body;
-  console.log(request.body);
   const date = new Date();
   const updated_at = date;
   const created_at = date;
@@ -226,9 +222,7 @@ const addNewGroup = (request, response) => {
 };
 const addUserGroups = async (request, response) => {
   let { groupname, members } = request.body;
-  console.log(members)
   async.map(members,function(member){
-    console.log(typeof member)
     try{
     pool.query(`update chatusers set usergroups = array_cat(usergroups,'{${groupname}}') where email='${member}'`),(error,results)=>{
       if(error)
