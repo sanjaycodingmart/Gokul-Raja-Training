@@ -1,0 +1,41 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest  
+    ports:
+      - '8002:5432'
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=slack
+    volumes: 
+      - ./pgdata:/var/lib/postgresql/data
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - '3000:3000'
+    restart: on-failure
+    container_name: frontend
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    ports:
+      - '4001:4001'
+    # links:
+    #   - localhost
+    restart: on-failure
+    container_name: backend
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=slack 
+      - POSTGRES_HOST=db   
+    volumes:
+      - /app/node_modules # Inside the container, don't try to override this folder, just leave as is
+      - ./server:/app # Look at the server directory and copy everything into the app folder in the container

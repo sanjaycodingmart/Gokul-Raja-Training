@@ -1,0 +1,6 @@
+EXPORTED CHAT WITH rajan@gmail.com
+Wed Jan 29 2020   7:00:30 AM    sri@gmail.com    hai rajan
+Wed Jan 29 2020   7:00:40 AM    rajan@gmail.com    hello
+Wed Jan 29 2020   7:00:44 AM    sri@gmail.com    wat
+Wed Jan 29 2020   7:00:50 AM    rajan@gmail.com    going good/
+Wed Jan 29 2020   7:00:54 AM    sri@gmail.com    yeah
