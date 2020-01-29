@@ -46,7 +46,7 @@ export default function CheckboxListSecondary(props) {
       members: checked
     };
     console.log(requestBody);
-    // addGroups();
+    addGroups();
     setopen(true)
     setChecked([])
     let send = await axios.post("http://localhost:4001/addgroup", requestBody);

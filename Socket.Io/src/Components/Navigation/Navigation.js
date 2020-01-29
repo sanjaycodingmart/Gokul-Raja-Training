@@ -21,9 +21,10 @@ import { Link } from "react-router-dom";
 import * as ROUTES from "../Constants/routes";
 import CoupleChat from "../CoupleChat/couplechat";
 import "./header.css";
+import { createStore } from "redux";
 import Tooltip from "@material-ui/core/Tooltip";
 import MenuAppBar from "../Profile/profile";
-import jwt_decode from 'jwt-decode'
+import jwt_decode from "jwt-decode";
 export default class Navigation extends Component {
   constructor(props) {
     super(props);
@@ -59,11 +60,11 @@ export default class Navigation extends Component {
         log: true,
         token: localStorage.getItem("token")
       });
-      let loggedIn=jwt_decode(localStorage.getItem("token"))
-      if(this.state.loggedIn!=loggedIn.email){
+      let loggedIn = jwt_decode(localStorage.getItem("token"));
+      if (this.state.loggedIn != loggedIn.email) {
         this.setState({
-          loggedIn:loggedIn.email
-        })
+          loggedIn: loggedIn.email
+        });
       }
       this.showAll();
     } else {
@@ -91,6 +92,17 @@ export default class Navigation extends Component {
       selectedUser: event.target.value
     });
   };
+  counter = (state = 0, action) => {
+    switch (action.type) {
+      case "INCREMENT":
+        return state + 1;
+      case "DECREMENT":
+        return state - 1;
+      default:
+        return state;
+    }
+  };
+
   addUserChat = () => {
     if (!this.state.chattedUser.includes(this.state.selectedUser)) {
       this.setState({
@@ -99,7 +111,6 @@ export default class Navigation extends Component {
     } else {
       return;
     }
-    
   };
   sideList = side => (
     <div
@@ -123,35 +134,36 @@ export default class Navigation extends Component {
         </ListItem>
       </List>
       <List>
-        {this.state.groups.length!=0 && this.state.groups.map((value, index) => (
-          <Link
-          to={{
-            pathname: "/groupchat",
-            state: {
-              sender: this.state.sender,
-              group:value,
-              allUsers: this.state.userList
-            }
-          }}
-        >
-          <ListItem button key={index}>
-            <ListItemIcon>
-              <Tooltip title={value} interactive>
-                <Button>
-                  <Avatar>{value[0]}</Avatar>
-                  {/* <img
+        {this.state.groups.length != 0 &&
+          this.state.groups.map((value, index) => (
+            <Link
+              to={{
+                pathname: "/groupchat",
+                state: {
+                  sender: this.state.sender,
+                  group: value,
+                  allUsers: this.state.userList
+                }
+              }}
+            >
+              <ListItem button key={index}>
+                <ListItemIcon>
+                  <Tooltip title={value} interactive>
+                    <Button>
+                      <Avatar>{value[0]}</Avatar>
+                      {/* <img
                     src={this.state.urls[text.split(" ")[1]]}
                     className="avatar"
                     alt={text}
                   /> */}
-                </Button>
-              </Tooltip>
-            </ListItemIcon>
+                    </Button>
+                  </Tooltip>
+                </ListItemIcon>
 
-            <ListItemText primary={value} />
-          </ListItem>
-          </Link>
-        ))}
+                <ListItemText primary={value} />
+              </ListItem>
+            </Link>
+          ))}
       </List>
 
       <Divider />
@@ -286,7 +298,8 @@ export default class Navigation extends Component {
     return true;
   };
   render() {
-    return (
+
+    return (  
       <Fragment>
         <Drawer
           open={this.state.left}

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { ChatBox } from "react-chatbox-component";
 import socketIOClient from "socket.io-client";
+import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 import axios from "axios";
 import "./couplechat.css";
@@ -15,7 +16,9 @@ export default class CoupleChat extends Component {
       receiver: "",
       userName: {},
       url: {},
-      uniqueSocket: ""
+      uniqueSocket: "",
+      exportemail:"",
+      exportChat:null
     };
     
   
@@ -97,6 +100,7 @@ export default class CoupleChat extends Component {
         receiver: this.state.receiver
       }
     });
+    
     console.log("Chats", chats);
     let respObjArray = chats.data.map((value, index) => {
       return {
@@ -121,6 +125,7 @@ export default class CoupleChat extends Component {
     
    
   };
+
 
   showUserChat = async props => {
     let receiver = this.props.location.state.receiver;
@@ -179,8 +184,34 @@ export default class CoupleChat extends Component {
       msg: ""
     });
   };
+  handleEmail = event =>this.setState({exportemail:event.target.value})
   handleMsg = event => this.setState({ msg: event.target.value });
+  showExportModal = async()=>{
+    let chats = await axios.get("http://localhost:4001/getchatmsg", {
+      headers: {
+        authorization: "Bearer " + this.state.token
+      },
+      params: {
+        sender: this.state.sender,
+        receiver: this.state.receiver
+      }
+    });
+    
+    let email=prompt("Enter your Email Id here..")
+    if(email){
+      console.log(this.state.exportemail)
+      this.setState({
+        exportemail:email,
+        exportChat:chats.data
+      })
+    }
 
+    axios.post("http://localhost:4001/sendmail",{
+      email:email,
+      chats:this.state.exportChat,
+      receiver:this.state.receiver
+    })
+  }
   render() {
     const user = {
       uid: this.state.sender
@@ -188,7 +219,16 @@ export default class CoupleChat extends Component {
     return (
       <Fragment>
         <div className="container">
-          <div className="chat-header"></div>
+          <div className="chat-header">
+          <h1>{this.state.userName[this.state.receiver]}</h1>
+         <div style={{marginLeft:1000}}>
+         {/* <input type="email" onChange={this.handleEmail} placeholder="Enter your email to export"/> */}
+         <Button variant="outlined" color="primary" onClick={()=>this.showExportModal()}>
+  Export Chat
+</Button>
+</div>
+
+          </div>
           <ChatBox messages={this.state.groupArray} user={user} />
         </div>
         <div className="message-footer">

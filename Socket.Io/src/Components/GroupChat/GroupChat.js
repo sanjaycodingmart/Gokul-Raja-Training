@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { ChatBox } from "react-chatbox-component";
 import "./groupchat.css";
 import axios from "axios";
+import Button from "@material-ui/core/Button";
 import socketIOClient from "socket.io-client";
 import io from "socket.io-client";
 
@@ -153,6 +154,26 @@ export default class GroupChat extends Component {
     // setTimeout(this.getGroup, 1000);
     // setInterval(this.getGroup, 5000);
   };
+  showExportModal = async()=>{
+    let groupMsg = await axios.get("http://localhost:4001/group", {
+      headers: { authorization: "Bearer " + this.state.token },
+
+      params: {
+        group: this.state.group
+      }
+    });
+    let email=prompt("Enter your Email Id here..")
+    if(email){
+      axios.post("http://localhost:4001/sendmail",{
+      email:email,
+      chats:groupMsg.data,
+      group:this.state.group
+    })
+      
+    }
+
+    
+  }
 
   render() {
     const user = {
@@ -162,6 +183,12 @@ export default class GroupChat extends Component {
       <Fragment>
         <div className="container">
         <h1>#{this.state.group}</h1>
+        <div style={{marginLeft:1000}}>
+         {/* <input type="email" onChange={this.handleEmail} placeholder="Enter your email to export"/> */}
+         <Button variant="outlined" color="primary" onClick={()=>this.showExportModal()}>
+  Export Chat
+</Button>
+</div>
           <div className="chat-header"></div>
           <ChatBox messages={this.state.groupArray} user={user} />
         </div>
